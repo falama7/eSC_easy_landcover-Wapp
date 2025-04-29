@@ -1,0 +1,31 @@
+# Dépendances principales
+Flask==2.3.2
+Werkzeug==2.3.6
+jinja2==3.1.2
+itsdangerous==2.1.2
+click==8.1.3
+gunicorn==21.2.0
+
+# Google Earth Engine et dépendances géospatiales
+earthengine-api==0.1.368
+geemap==0.27.0
+geopandas==0.14.0
+folium==0.14.0
+
+# Dépendances pour la manipulation de données
+pandas==2.1.0
+numpy==1.25.2
+matplotlib==3.7.3
+plotly==5.17.0
+
+# Autres dépendances
+python-dotenv==1.0.0
+jsonschema==4.19.1
+pyyaml==6.0.1
+IPython==8.15.0
+ipykernel==6.25.2
+ipywidgets==8.1.1
+
+# Dépendances pour la production
+Flask-Limiter==3.5.0
+flask-cors==4.0.0

@@ -1,0 +1,171 @@
+{# Composant de carte pour l'application d'analyse de la couverture terrestre #}
+
+<div class="map-component">
+    <div class="card mb-3">
+        <div class="card-header bg-success text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-map me-2"></i>
+                    {% if title %}{{ title }}{% else %}Carte{% endif %}
+                </h5>
+                <div class="map-controls">
+                    <button type="button" class="btn btn-sm btn-light" id="fullscreenToggle" title="Plein écran">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div id="{{ map_id|default('map') }}" class="map-container" style="height: {{ height|default('500px') }}"></div>
+        </div>
+        {% if show_legend %}
+        <div class="card-footer p-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="map-legend">
+                        <h6 class="mb-2 text-muted">Légende</h6>
+                        <div class="legend-container">
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #419BDF;"></div> Eau
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #397D49;"></div> Arbres
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #88B053;"></div> Herbe
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #7A87C6;"></div> Végétation inondée
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #E49635;"></div> Cultures
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #DFC35A;"></div> Arbustes
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #C4281B;"></div> Zone bâtie
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #A59B8F;"></div> Sol nu
+                            </div>
+                            <div class="legend-item">
+                                <div class="color-box" style="background-color: #B39FE1;"></div> Neige et glace
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="map-tools">
+                        <h6 class="mb-2 text-muted">Outils</h6>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary" id="zoomIn" title="Zoom avant">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="zoomOut" title="Zoom arrière">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="resetView" title="Réinitialiser la vue">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            {% if show_export %}
+                            <button type="button" class="btn btn-outline-secondary" id="exportMap" title="Exporter la carte">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if include_script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialisation de la carte
+        const map = window.mapUtils.initMap('{{ map_id|default('map') }}', [{{ center|default('43.0731, -89.4012') }}], {{ zoom|default('10') }});
+        
+        {% if show_bbox and bbox %}
+        // Dessine le rectangle de la région
+        window.mapUtils.drawRegionRectangle([{{ bbox|join(', ') }}]);
+        // Centre la carte sur la région
+        window.mapUtils.centerMapOnBbox([{{ bbox|join(', ') }}]);
+        {% endif %}
+        
+        {% if show_legend %}
+        // Ajoute la légende Dynamic World
+        window.mapUtils.addDynamicWorldLegend();
+        {% endif %}
+        
+        // Gestionnaire pour le bouton plein écran
+        document.getElementById('fullscreenToggle').addEventListener('click', function() {
+            const mapContainer = document.getElementById('{{ map_id|default('map') }}');
+            
+            if (!document.fullscreenElement) {
+                if (mapContainer.requestFullscreen) {
+                    mapContainer.requestFullscreen();
+                } else if (mapContainer.mozRequestFullScreen) {
+                    mapContainer.mozRequestFullScreen();
+                } else if (mapContainer.webkitRequestFullscreen) {
+                    mapContainer.webkitRequestFullscreen();
+                } else if (mapContainer.msRequestFullscreen) {
+                    mapContainer.msRequestFullscreen();
+                }
+                this.innerHTML = '<i class="fas fa-compress"></i>';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                this.innerHTML = '<i class="fas fa-expand"></i>';
+            }
+        });
+        
+        // Gestionnaires pour les boutons de zoom
+        document.getElementById('zoomIn').addEventListener('click', function() {
+            map.zoomIn();
+        });
+        
+        document.getElementById('zoomOut').addEventListener('click', function() {
+            map.zoomOut();
+        });
+        
+        // Gestionnaire pour le bouton de réinitialisation de la vue
+        document.getElementById('resetView').addEventListener('click', function() {
+            {% if show_bbox and bbox %}
+            window.mapUtils.centerMapOnBbox([{{ bbox|join(', ') }}]);
+            {% else %}
+            map.setView([{{ center|default('43.0731, -89.4012') }}], {{ zoom|default('10') }});
+            {% endif %}
+        });
+        
+        {% if show_export %}
+        // Gestionnaire pour le bouton d'exportation
+        document.getElementById('exportMap').addEventListener('click', function() {
+            const mapState = window.mapUtils.exportMapState();
+            const blob = new Blob([JSON.stringify(mapState)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'map_state.json';
+            document.body.appendChild(a);
+            a.click();
+            
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        });
+        {% endif %}
+    });
+</script>
+{% endif %}

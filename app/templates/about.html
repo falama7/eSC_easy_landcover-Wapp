@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">
+    <i class="fas fa-info-circle me-2"></i>
+    À propos de l'application
+</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Présentation</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    Cette application web permet d'analyser l'évolution de la couverture terrestre au fil du temps en utilisant 
+                    <strong>Google Earth Engine</strong> et le jeu de données <strong>Dynamic World</strong>. Elle est basée sur un 
+                    notebook Jupyter converti en application web avec Flask et conteneurisée avec Docker.
+                </p>
+                
+                <p>
+                    L'application vous permet de :
+                </p>
+                
+                <ul>
+                    <li>Sélectionner une région d'intérêt partout dans le monde</li>
+                    <li>Définir une période d'analyse</li>
+                    <li>Visualiser les changements de couverture terrestre au fil du temps</li>
+                    <li>Explorer différentes options de visualisation (classification, hillshade, etc.)</li>
+                </ul>
+                
+                <p>
+                    Les résultats sont présentés sous forme de carte interactive avec un inspecteur temporel qui vous permet de 
+                    voir comment la couverture terrestre a changé au cours de la période sélectionnée.
+                </p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Google Earth Engine et Dynamic World</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Google Earth Engine</h5>
+                        <p>
+                            Google Earth Engine est une plateforme de calcul géospatial à grande échelle pour l'analyse et la visualisation 
+                            de données géospatiales. Elle permet d'accéder à un catalogue massif de données satellitaires et de les analyser 
+                            à l'échelle planétaire.
+                        </p>
+                        <p>
+                            La plateforme offre :
+                        </p>
+                        <ul>
+                            <li>Des pétaoctets de données géospatiales</li>
+                            <li>Une infrastructure de calcul massivement parallèle</li>
+                            <li>Des API pour Python et JavaScript</li>
+                            <li>Des outils d'analyse avancés</li>
+                        </ul>
+                        <p>
+                            <a href="https://earthengine.google.com/" target="_blank" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-external-link-alt me-1"></i> En savoir plus
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Dynamic World</h5>
+                        <p>
+                            Dynamic World est un jeu de données de couverture terrestre global à haute résolution temporelle et spatiale. 
+                            Il offre des prédictions de couverture terrestre près du temps réel générées à partir d'images Sentinel-2 
+                            à une résolution spatiale de 10 mètres.
+                        </p>
+                        <p>
+                            Caractéristiques principales :
+                        </p>
+                        <ul>
+                            <li>Résolution spatiale de 10 mètres</li>
+                            <li>Couverture globale</li>
+                            <li>Mise à jour fréquente (environ tous les 5 jours)</li>
+                            <li>9 classes de couverture terrestre</li>
+                        </ul>
+                        <p>
+                            <a href="https://dynamicworld.app/" target="_blank" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-external-link-alt me-1"></i> Explorer Dynamic World
+                            </a>
+                        </p>
+                    </div>
+                </div>

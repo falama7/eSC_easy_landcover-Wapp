@@ -1,0 +1,146 @@
+/* Styles généraux */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* En-têtes */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+/* Cartes */
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+    font-weight: 500;
+}
+
+/* Boutons */
+.btn {
+    border-radius: 0.3rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+/* Barre de navigation */
+.navbar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.navbar-brand {
+    font-weight: 600;
+}
+
+/* Pied de page */
+footer {
+    margin-top: 2rem;
+    padding: 2rem 0;
+    background-color: #2c3e50;
+    color: white;
+}
+
+footer a {
+    color: #ecf0f1;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+/* Formulaires */
+.form-label {
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Indicateurs de chargement */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* CodeMirror (éditeur de code) */
+.CodeMirror {
+    height: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+}
+
+/* Accordion personnalisé */
+.accordion-item {
+    border-radius: 0.3rem;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.accordion-button {
+    font-weight: 500;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #2980b9;
+}
+
+/* Tableaux */
+.table {
+    border-radius: 0.3rem;
+    overflow: hidden;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Info boxes */
+.alert {
+    border-radius: 0.3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}

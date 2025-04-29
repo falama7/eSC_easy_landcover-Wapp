@@ -1,0 +1,108 @@
+/* Styles pour les cartes et visualisations */
+
+/* Conteneur de carte */
+#mapContainer {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* iframe de carte */
+#mapFrame {
+    width: 100%;
+    border: none;
+    height: 600px;
+}
+
+/* Message initial */
+#initialMessage, #loadingIndicator, #errorMessage {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+/* Indicateur de chargement */
+#loadingIndicator .spinner-border {
+    color: #3498db;
+}
+
+/* Message d'erreur */
+#errorMessage {
+    color: #e74c3c;
+}
+
+/* Boîtes de couleur pour la légende */
+.color-box {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    border-radius: 0.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
+}
+
+/* Style pour la légende */
+.legend {
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    font-size: 0.9rem;
+}
+
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+}
+
+.legend-item {
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Popups de carte */
+.leaflet-popup-content {
+    max-width: 300px;
+}
+
+/* Inspecteur temporel */
+.ts-inspector-control {
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+}
+
+.ts-inspector-title {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.ts-inspector-plot {
+    height: 200px;
+    margin: 0.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #mapFrame {
+        height: 400px;
+    }
+    
+    .legend {
+        font-size: 0.8rem;
+    }
+    
+    .ts-inspector-control {
+        max-width: 250px;
+    }
+    
+    .ts-inspector-plot {
+        height: 150px;
+    }
+}

@@ -1,0 +1,80 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environnements virtuels
+venv/
+ENV/
+env/
+
+# Notebook Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Credentials
+credentials/*.json
+credentials/*.pem
+credentials/*.p12
+
+# Logs
+logs/
+*.log
+
+# Cache et fichiers temporaires
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+
+# Fichiers IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers générés dynamiquement
+app/static/maps/*.html
+
+# Fichiers volumineux
+*.csv
+*.shp
+*.zip
+*.tar
+*.gz
+
+# README et documentation
+README.md
+LICENSE
+CHANGELOG.md
+docs/

@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<!-- jQuery UI CSS -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<!-- CSS pour CodeMirror (éditeur de code) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+    <i class="fas fa-globe-americas me-2"></i>
+    Analyse temporelle de la couverture terrestre
+</h1>
+
+<div class="row">
+    <div class="col-lg-4">
+        <!-- Panneau de configuration -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>
+                    Options d'analyse
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="analyzeForm">
+                    <!-- Région d'intérêt -->
+                    <div class="mb-3">
+                        <label for="regionSelect" class="form-label fw-bold">1. Région d'intérêt</label>
+                        <select id="regionSelect" class="form-select mb-2">
+                            <option value="predefined">Région prédéfinie (Madison, Wisconsin)</option>
+                            <option value="custom">Coordonnées personnalisées</option>
+                        </select>
+                        
+                        <div id="customCoordinates" class="row g-2 mt-2 d-none">
+                            <div class="col-6">
+                                <label for="minLon" class="form-label small">Min. Longitude</label>
+                                <input type="number" id="minLon" class="form-control form-control-sm" value="{{ default_bbox[0] }}" step="0.01">
+                            </div>
+                            <div class="col-6">
+                                <label for="minLat" class="form-label small">Min. Latitude</label>
+                                <input type="number" id="minLat" class="form-control form-control-sm" value="{{ default_bbox[1] }}" step="0.01">
+                            </div>
+                            <div class="col-6">
+                                <label for="maxLon" class="form-label small">Max. Longitude</label>
+                                <input type="number" id="maxLon" class="form-control form-control-sm" value="{{ default_bbox[2] }}" step="0.01">
+                            </div>
+                            <div class="col-6">
+                                <label for="maxLat" class="form-label small">Max. Latitude</label>
+                                <input type="number" id="maxLat" class="form-control form-control-sm" value="{{ default_bbox[3] }}" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Période d'analyse -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">2. Période d'analyse</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="startDate" class="form-label small">Date de début</label>
+                                <input type="date" id="startDate" class="form-control form-control-sm" value="{{ default_start_date }}">
+                            </div>
+                            <div class="col-6">
+                                <label for="endDate" class="form-label small">Date de fin</label>
+                                <input type="date" id="endDate" class="form-control form-control-sm" value="{{ default_end_date }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Type de visualisation -->
+                    <div class="mb-3">
+                        <label for="returnType" class="form-label fw-bold">3. Type de visualisation</label>
+                        <select id="returnType" class="form-select">
+                            <option value="class" selected>Classification (pour l'analyse)</option>
+                            <option value="hillshade">Hillshade (relief ombré)</option>
+                            <option value="visualize">Visualisation</option>
+                            <option value="probability">Probabilité</option>
+                        </select>
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            "Class" est recommandé pour l'analyse des données.
+                        </small>
+                    </div>
+                    
+                    <!-- Bouton d'analyse -->
+                    <button type="submit" id="analyzeButton" class="btn btn-primary w-100">
+                        <i class="fas fa-play me-2"></i>
+                        Lancer l'analyse
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Panneau d'informations sur les données -->
+        <div class="card mb-4 d-none" id="dataInfoCard">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Informations sur les données
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="dataInfo">
+                    <!-- Les informations seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <!-- Carte et résultats -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-map me-2"></i>
+                    Carte et résultats
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <!-- Message initial -->
+                <div id="initialMessage" class="text-center py-5">
+                    <i class="fas fa-map-marked-alt fa-4x text-muted mb-3"></i>
+                    <h4>Prêt pour l'analyse</h4>
+                    <p class="text-muted">
+                        Configurez les paramètres à gauche et cliquez sur "Lancer l'analyse" pour commencer.
+                    </p>
+                </div>
+                
+                <!-- Carte (sera affichée après l'analyse) -->
+                <div id="mapContainer" class="d-none">
+                    <iframe id="mapFrame" width="100%" height="600" frameborder="0"></iframe>
+                </div>
+                
+                <!-- Indicateur de chargement -->
+                <div id="loadingIndicator" class="text-center py-5 d-none">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                    <h4>Analyse en cours</h4>
+                    <p class="text-muted">
+                        Veuillez patienter pendant que nous traitons les données...
+                    </p>
+                </div>
+                
+                <!-- Message d'erreur -->
+                <div id="errorMessage" class="text-center py-5 d-none">
+                    <i class="fas fa-exclamation-triangle fa-4x text-danger mb-3"></i>
+                    <h4>Erreur</h4>
+                    <p id="errorText" class="text-danger">
+                        Une erreur s'est produite lors de l'analyse.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cellules du notebook original -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0 d-flex justify-content-between align-items-center">
+                    <span>
+                        <i class="fas fa-code me-2"></i>
+                        Cellules du notebook original
+                    </span>
+                    <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#notebookCells">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </h5>
+            </div>
+            <div class="collapse" id="notebookCells">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <p>
+                            Voici les cellules du notebook original. Vous pouvez les consulter pour comprendre le code sous-jacent.
+                        </p>
+                    </div>
+                    
+                    <div class="accordion" id="notebookAccordion">
+                        <!-- Import -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell1">
+                                    <code>Import des bibliothèques</code>
+                                </button>
+                            </h2>
+                            <div id="cell1" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.import }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Create Map -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell2">
+                                    <code>Création de la carte</code>
+                                </button>
+                            </h2>
+                            <div id="cell2" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.create_map }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Set Region -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell3">
+                                    <code>Définition de la région</code>
+                                </button>
+                            </h2>
+                            <div id="cell3" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.set_region }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Set Date -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell4">
+                                    <code>Définition de la période</code>
+                                </button>
+                            </h2>
+                            <div id="cell4" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.set_date }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Get Images -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell5">
+                                    <code>Récupération des images</code>
+                                </button>
+                            </h2>
+                            <div id="cell5" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.get_images }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Visualize -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell6">
+                                    <code>Visualisation de la première image</code>
+                                </button>
+                            </h2>
+                            <div id="cell6" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.visualize }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- TS Inspector -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell7">
+                                    <code>Inspecteur de séries temporelles</code>
+                                </button>
+                            </h2>
+                            <div id="cell7" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.ts_inspector }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hillshade -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cell8">
+                                    <code>Visualisation avec hillshade</code>
+                                </button>
+                            </h2>
+                            <div id="cell8" class="accordion-collapse collapse" data-bs-parent="#notebookAccordion">
+                                <div class="accordion-body">
+                                    <textarea class="code-cell">{{ notebook_cells.hillshade }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<!-- CodeMirror (éditeur de code) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+
+<!-- Script pour initialiser les éditeurs de code -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialise les éditeurs de code
+        document.querySelectorAll('.code-cell').forEach(function(textarea) {
+            CodeMirror.fromTextArea(textarea, {
+                mode: 'python',
+                theme: 'monokai',
+                lineNumbers: true,
+                readOnly: true
+            });
+        });
+        
+        // Gestionnaire pour le sélecteur de région
+        document.getElementById('regionSelect').addEventListener('change', function() {
+            const customCoords = document.getElementById('customCoordinates');
+            if (this.value === 'custom') {
+                customCoords.classList.remove('d-none');
+            } else {
+                customCoords.classList.add('d-none');
+            }
+        });
+        
+        // Gestionnaire pour le formulaire d'analyse
+        document.getElementById('analyzeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Affiche l'indicateur de chargement
+            document.getElementById('initialMessage').classList.add('d-none');
+            document.getElementById('mapContainer').classList.add('d-none');
+            document.getElementById('errorMessage').classList.add('d-none');
+            document.getElementById('loadingIndicator').classList.remove('d-none');
+            
+            // Récupère les valeurs du formulaire
+            let bbox;
+            if (document.getElementById('regionSelect').value === 'predefined') {
+                // Utilise la bbox prédéfinie
+                bbox = [{{ default_bbox|join(', ') }}];
+            } else {
+                // Utilise les coordonnées personnalisées
+                bbox = [
+                    parseFloat(document.getElementById('minLon').value),
+                    parseFloat(document.getElementById('minLat').value),
+                    parseFloat(document.getElementById('maxLon').value),
+                    parseFloat(document.getElementById('maxLat').value)
+                ];
+            }
+            
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const returnType = document.getElementById('returnType').value;
+            
+            // Requête API
+            fetch('/api/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    bbox: bbox,
+                    start_date: startDate,
+                    end_date: endDate,
+                    return_type: returnType
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Cache l'indicateur de chargement
+                document.getElementById('loadingIndicator').classList.add('d-none');
+                
+                if (data.error) {
+                    // Affiche le message d'erreur
+                    document.getElementById('errorText').textContent = data.error;
+                    document.getElementById('errorMessage').classList.remove('d-none');
+                } else {
+                    // Affiche la carte
+                    const mapFrame = document.getElementById('mapFrame');
+                    mapFrame.src = data.map_url;
+                    document.getElementById('mapContainer').classList.remove('d-none');
+                    
+                    // Affiche les informations sur les données
+                    const dataInfo = document.getElementById('dataInfo');
+                    dataInfo.innerHTML = `
+                        <div class="mb-2">
+                            <strong>Période:</strong> ${data.info.start_date} à ${data.info.last_date}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Images disponibles:</strong> ${data.info.image_count}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Type de visualisation:</strong> ${data.info.return_type}
+                        </div>
+                    `;
+                    
+                    // Affiche le panneau d'informations
+                    document.getElementById('dataInfoCard').classList.remove('d-none');
+                }
+            })
+            .catch(error => {
+                // Cache l'indicateur de chargement
+                document.getElementById('loadingIndicator').classList.add('d-none');
+                
+                // Affiche le message d'erreur
+                document.getElementById('errorText').textContent = 'Erreur de connexion au serveur: ' + error.message;
+                document.getElementById('errorMessage').classList.remove('d-none');
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+{% endblock %}

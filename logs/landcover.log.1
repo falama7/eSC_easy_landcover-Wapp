@@ -1,0 +1,77 @@
+2025-04-28 14:54:36,144 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 14:54:36,188 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 14:54:36,264 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 14:54:36,325 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 14:54:49,475 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 14:54:49,892 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 14:54:50,027 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 14:54:50,244 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 14:56:39,422 ERROR: Exception on /about [GET] [in /usr/local/lib/python3.9/site-packages/flask/app.py:1414]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.9/site-packages/flask/app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/app/app/routes.py", line 50, in about
+    return render_template(
+  File "/usr/local/lib/python3.9/site-packages/flask/templating.py", line 150, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "/usr/local/lib/python3.9/site-packages/jinja2/environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "/usr/local/lib/python3.9/site-packages/jinja2/environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+  File "/usr/local/lib/python3.9/site-packages/jinja2/environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "/usr/local/lib/python3.9/site-packages/jinja2/loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+  File "/usr/local/lib/python3.9/site-packages/jinja2/environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "/usr/local/lib/python3.9/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/app/app/templates/about.html", line 3, in template
+    {% block content %}
+jinja2.exceptions.TemplateSyntaxError: Unexpected end of template. Jinja was looking for the following tags: 'endblock'. The innermost block that needs to be closed is 'block'.
+2025-04-28 14:56:57,317 ERROR: Erreur lors de la création de la carte avec série temporelle: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/gee_utils.py:263]
+2025-04-28 14:56:57,321 ERROR: Erreur lors de l'analyse: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/routes.py:127]
+2025-04-28 14:57:17,147 ERROR: Erreur lors de la création de la carte avec série temporelle: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/gee_utils.py:263]
+2025-04-28 14:57:17,151 ERROR: Erreur lors de l'analyse: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/routes.py:127]
+2025-04-28 15:05:48,832 ERROR: Erreur lors de la création de la carte avec série temporelle: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/gee_utils.py:263]
+2025-04-28 15:05:48,845 ERROR: Erreur lors de l'analyse: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/routes.py:127]
+2025-04-28 15:06:13,670 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 15:06:13,670 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 15:06:13,702 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 15:06:13,744 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 15:06:24,622 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 15:06:25,016 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 15:06:25,045 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 15:06:25,743 INFO: Google Earth Engine initialisé avec succès [in /app/app/gee_utils.py:53]
+2025-04-28 15:06:36,328 ERROR: Erreur lors de la création de la carte avec série temporelle: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/gee_utils.py:263]
+2025-04-28 15:06:36,330 ERROR: Erreur lors de l'analyse: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/routes.py:127]
+2025-04-28 15:06:43,188 ERROR: Erreur lors de la création de la carte avec série temporelle: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/gee_utils.py:263]
+2025-04-28 15:06:43,193 ERROR: Erreur lors de l'analyse: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/routes.py:127]
+2025-04-28 15:18:04,896 ERROR: Erreur lors de la création de la carte avec série temporelle: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/gee_utils.py:263]
+2025-04-28 15:18:04,912 ERROR: Erreur lors de l'analyse: ts_inspector() missing 3 required positional arguments: 'right_ts', 'left_names', and 'right_names' [in /app/app/routes.py:127]
+2025-04-28 16:44:58,640 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 16:44:58,640 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 16:44:58,640 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 16:44:58,640 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-28 16:45:08,495 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a8768f730>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-28 16:45:08,495 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a87690820>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-28 16:45:08,495 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a876918b0>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-28 16:45:08,499 WARNING: Google Earth Engine n'a pas pu être initialisé [in /app/app/__init__.py:48]
+2025-04-28 16:45:08,499 WARNING: Google Earth Engine n'a pas pu être initialisé [in /app/app/__init__.py:48]
+2025-04-28 16:45:08,499 WARNING: Google Earth Engine n'a pas pu être initialisé [in /app/app/__init__.py:48]
+2025-04-28 16:45:08,512 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a87691940>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-28 16:45:08,516 WARNING: Google Earth Engine n'a pas pu être initialisé [in /app/app/__init__.py:48]
+2025-04-29 03:55:51,008 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-29 03:55:51,008 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-29 03:55:51,008 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-29 03:55:51,008 INFO: Application démarrée [in /app/app/__init__.py:41]
+2025-04-29 03:55:57,166 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a8768f730>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-29 03:55:57,166 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a876918b0>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-29 03:55:57,167 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a87691940>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
+2025-04-29 03:55:57,166 ERROR: Erreur lors de l'initialisation de GEE: HTTPSConnectionPool(host='oauth2.googleapis.com', port=443): Max retries exceeded with url: /token (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f8a87690820>: Failed to resolve 'oauth2.googleapis.com' ([Errno -2] Name or service not known)")) [in /app/app/gee_utils.py:61]
